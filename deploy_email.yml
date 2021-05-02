@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email
+  labels:
+    app: email
+spec:
+  # replicas: 3
+  selector:
+    matchLabels:
+      app: email
+  template:
+    metadata:
+      labels:
+        app: email
+    spec:
+      containers:
+        - name: au
+          image: docker.io/lyhleon/au:latest
+          ports:
+            - containerPort: 8080
+        - name: ae
+          image: docker.io/lyhleon/ae:latest
+          ports:
+            - containerPort: 8081
+        - name: be
+          image: docker.io/lyhleon/be:latest
+          ports:
+            - containerPort: 8082
+        - name: bu
+          image: docker.io/lyhleon/bu:latest
+          ports:
+            - containerPort: 8083
+
+---
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: email
+spec:
+  type: NodePort
+  ports:
+    - name: au
+      port: 8080
+      targetPort: 8080
+      nodePort: 30100
+      protocol: TCP
+    - name: ae
+      port: 8081
+      targetPort: 8081
+      nodePort: 30200
+      protocol: TCP
+    - name: be
+      port: 8082
+      targetPort: 8082
+      nodePort: 30300
+      protocol: TCP
+    - name: bu
+      port: 8083
+      targetPort: 8083
+      nodePort: 30400
+      protocol: TCP
+  selector:
+    app: email
